@@ -3,10 +3,12 @@
 #include <fstream>
 #include <iomanip>
 #include <numeric>
+#include <list>
+#include <map>
 
 using namespace std;
 
-int sum_ascii(string& str);
+int gen_hash_index(string& str);
 
 int main() {
     long long grand_total = 0;
