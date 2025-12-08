@@ -10,6 +10,12 @@ using namespace std;
 
 //prototype function that will calculate our hash index for the given string value
 int gen_hash_index(string& str);
+void print_menu();
+void print_first_100_entries(const map<int, list<string>>& table);
+void search_for_key(const map<int, list<string>>& table);
+void add_key(map<int, list<string>>& table);
+void remove_key(map<int, list<string>>& table);
+void modify_key(map<int, list<string>>& table);
 
 int main() {
     //declaring the line string variable that will store the lines from our data file
@@ -38,21 +44,26 @@ int main() {
     //closes the data file
     fin.close();
 
-    //declares and initializes the variables that will be used to traverse the hash table to a predetermined amount
-    int entries_shown = 0;
-    int max_entries = 100;
-    int entry_count = 1;
+    int choice = 0;
+    while(true) {
+        print_menu();
+        cout << "Please enter your choice: ";
+        cin >> choice;
 
-    //for loop that will traverse the hash table and output the first 100 values on our table
-    for (const auto& pair : hash_table) {
-        if (entries_shown >= max_entries)
-            break;
-
-        const string& first_code = pair.second.front();
-
-        cout << "Entry #" << entry_count << ": " << first_code << endl;
-        entries_shown++;
-        entry_count++;
+        if (choice < 1 && choice > 6)
+            cout << "Invalid input\n";
+        else {
+            switch(choice) {
+                case 1:
+                    print_first_100_entries(hash_table);
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+            }
+        }
     }
 
     return 0;
@@ -66,6 +77,35 @@ int gen_hash_index(string& str) {
     }
 
     return hash_index ;
+}
+
+void print_menu() {
+    cout << "Menu:\n";
+    cout << "1. Print first 100 entries\n";
+    cout << "2. Search for a key\n";
+    cout << "3. Add a new code\n";
+    cout << "4. Remove a code\n";
+    cout << "5. Modify a code\n";
+    cout << "6. Exit\n";
+}
+
+void print_first_100_entries(const map<int, list<string>>& table){
+    //declares and initializes the variables that will be used to traverse the hash table to a predetermined amount
+    int entries_shown = 0;
+    int max_entries = 100;
+    int entry_count = 1;
+
+    //for loop that will traverse the hash table and output the first 100 values on our table
+    for (const auto& pair : table) {
+        if (entries_shown >= max_entries)
+            break;
+
+        const string& first_code = pair.second.front();
+
+        cout << "Entry #" << entry_count << ": " << first_code << endl;
+        entries_shown++;
+        entry_count++;
+    }
 }
 
 /* 
