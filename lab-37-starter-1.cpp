@@ -15,33 +15,48 @@ int main() {
     int result = 0;
     string line;
     
-    ifstream fin("lab-37-data-3.txt");
+    map<int, list<string>> hash_table;
 
-    while (getline(fin, line)) {
-        if(!line.empty()) {
-            result = sum_ascii(line);
-            grand_total += result;
-        }
-    }
+    ifstream fin("lab-37-data-3.txt");
 
     if(!fin) {
         cout << "Could not open the requested data file.\n";
     }
 
-    cout << "The grand total of the ASCII values is: " << grand_total;
+    while (getline(fin, line)) {
+        if(!line.empty()) {
+            int hash_i = gen_hash_index(line);
+            hash_table[hash_i].push_back(line);
+        }
+    }
 
     fin.close();
+
+    int entries_shown = 0;
+    int max_entries = 100;
+    int entry_count = 1;
+
+    for (const auto& pair : hash_table) {
+        if (entries_shown >= max_entries)
+            break;
+
+        const string& first_code = pair.second.front();
+
+        cout << "Entry #" << entry_count << ": " << first_code << endl;
+        entries_shown++;
+        entry_count++;
+    }
 
     return 0;
 }
 
-int sum_ascii(string& str) {
-    int sum = 0;
+int gen_hash_index(string& str) {
+    int hash_index  = 0;
     for (char c : str) {
-        sum += (int) c;
+        hash_index  += (int) c;
     }
 
-    return sum;
+    return hash_index ;
 }
 
 /* 
