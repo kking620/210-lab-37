@@ -58,10 +58,20 @@ int main() {
                     print_first_100_entries(hash_table);
                     break;
                 case 2:
+                    search_for_key(hash_table);
+                    break;
                 case 3:
+                    add_key(hash_table);
+                    break;
                 case 4:
+                    remove_key(hash_table);
+                    break;
                 case 5:
+                    modify_key(hash_table);
+                    break;
                 case 6:
+                    "Exiting program\n";
+                    return 0;
             }
         }
     }
@@ -105,6 +115,31 @@ void print_first_100_entries(const map<int, list<string>>& table){
         cout << "Entry #" << entry_count << ": " << first_code << endl;
         entries_shown++;
         entry_count++;
+    }
+}
+
+void search_for_key(const map<int, list<string>>& table) {
+    string desired_code;
+    cout << "Enter the 12 character code you wish to find: ";
+    getline(cin, desired_code);
+    cout << endl;
+
+    if (desired_code.length() != 12) {
+        cout << "Ivalid code. Must be 12 characters long.\n";
+        return;
+    }
+
+    int hash_i = gen_hash_index(desired_code);
+    auto it = table.find(hash_i);
+
+    if (it != table.end()) {
+        for (const string& data_code : it->second) {
+            if (data_code == desired_code) {
+            cout << "Found code " << desired_code << "at hash index " << hash_i << endl;
+            return;
+            }
+        }
+        cout << "The desired code was not found in the hash table\n";
     }
 }
 
