@@ -31,13 +31,14 @@ int main() {
     if(!fin) {
         cout << "Could not open the requested data file.\n";
     }
-
     //while loop that will continuously run until it has traversed the entirety of the data file
-    while (getline(fin, line)) {
-        //if the line is not empty, we will calculate the hash index and then add the string that we derived the hash index from to the hash table
-        if(!line.empty()) {
-            int hash_i = gen_hash_index(line);
-            hash_table[hash_i].push_back(line);
+    else {
+        while (getline(fin, line)) {
+            //if the line is not empty, we will calculate the hash index and then add the string that we derived the hash index from to the hash table
+            if(!line.empty()) {
+                int hash_i = gen_hash_index(line);
+                hash_table[hash_i].push_back(line);
+            }
         }
     }
 
@@ -49,6 +50,7 @@ int main() {
         print_menu();
         cout << "Please enter your choice: ";
         cin >> choice;
+        cin.ignore();
 
         if (choice < 1 && choice > 6)
             cout << "Invalid input\n";
@@ -124,7 +126,8 @@ void print_first_100_entries(const map<int, list<string>>& table){
 void search_for_key(const map<int, list<string>>& table) {
     string desired_code;
     cout << "Enter the 12 character code you wish to find: ";
-    getline(cin, desired_code);
+    cin >> desired_code;
+    cin.ignore();
     cout << endl;
 
     if (desired_code.length() != 12) {
@@ -149,7 +152,9 @@ void search_for_key(const map<int, list<string>>& table) {
 void add_key(map<int, list<string>>& table) {
     string new_code;
     cout << "Enter the new 12-char code to add: ";
-    getline(cin, new_code);
+    cin >> new_code;
+    cin.ignore();
+    cout << endl;
 
     if (new_code.length() != 12) {
         cout << "Invalid code length. Must be 12 characters. Not added.\n";
@@ -179,7 +184,10 @@ void add_key(map<int, list<string>>& table) {
 void remove_key(map<int, list<string>>& table) {
     string target_code;
     cout << "Enter the 12-char code to remove: ";
-    getline(cin, target_code);
+    cin >> target_code;
+    cin.ignore();
+    cout << endl;
+
 
     int hash_i = gen_hash_index(target_code);
     auto map_it = table.find(hash_i);
@@ -200,6 +208,44 @@ void remove_key(map<int, list<string>>& table) {
         }
     }
     cout << "Code not found in the table. Nothing removed.\n";
+}
+
+void modify_key(map<int, list<string>>& table) {
+    string old_code;
+    string new_code;
+
+    cout << "Enter the 12-char code to modify: ";
+    cin >> old_code;
+    cin.ignore();
+    cout << endl;
+
+    int hash_i_old = gen_hash_index(old_code);
+    auto map_it = table.find(hash_i_old);
+
+    if (map_it != table.end()) {
+        auto& code_list = map_it->second;
+        bool found = false;
+        for (auto list_it = code_list.begin(); list_it != code_list.end(); ++list_it) {
+            if (*list_it == old_code) {
+                found = true;
+                cout << "Found " << old_code << endl;
+
+                add_key(table);
+
+                code_list.erase(list_it);
+                if (code_list.empty()) {
+                    table.erase(map_it);
+                }
+                
+                return;
+            }
+        }
+        if (!found) {
+             cout << "Code not found in the list.\n";
+        }
+    } else {
+        cout << "Code not found in the table.\n";
+    }
 }
 
 /* 
