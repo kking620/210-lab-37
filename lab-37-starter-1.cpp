@@ -46,14 +46,19 @@ int main() {
     fin.close();
 
     int choice;
+    //while loop that continuously loops while the choice is not equal to 6
     while(true) {
+        //calls the print menu function that displays the users options
         print_menu();
+        //requests the user to input a menu action 
         cout << "Please enter your choice: ";
         cin >> choice;
         cin.ignore();
 
+        //if the user input is not valid, then returns this message
         if (choice < 1 && choice > 6)
             cout << "Invalid input\n";
+        //else a switch that uses the user input as an argument is called
         else {
             switch(choice) {
                 case 1:
@@ -94,6 +99,7 @@ int gen_hash_index(string& str) {
     return hash_index ;
 }
 
+//void function that displays the options that the users can perform
 void print_menu() {
     cout << "Menu:\n";
     cout << "1. Print first 100 entries\n";
@@ -123,6 +129,7 @@ void print_first_100_entries(const map<int, list<string>>& table){
     }
 }
 
+//void function that traverses the hash table in order to find a desired value
 void search_for_key(const map<int, list<string>>& table) {
     string desired_code;
     cout << "Enter the 12 character code you wish to find: ";
@@ -130,6 +137,7 @@ void search_for_key(const map<int, list<string>>& table) {
     cin.ignore();
     cout << endl;
 
+    //if the desired code is not the correct length, then we will return to the main function with this error message
     if (desired_code.length() != 12) {
         cout << "Ivalid code. Must be 12 characters long.\n";
         return;
@@ -138,6 +146,7 @@ void search_for_key(const map<int, list<string>>& table) {
     int hash_i = gen_hash_index(desired_code);
     auto it = table.find(hash_i);
 
+    //this code block finds the desired code by traversing the key values
     if (it != table.end()) {
         for (const string& data_code : it->second) {
             if (data_code == desired_code) {
@@ -149,6 +158,7 @@ void search_for_key(const map<int, list<string>>& table) {
     }
 }
 
+//void function that adds a new value to the hash table
 void add_key(map<int, list<string>>& table) {
     string new_code;
     cout << "Enter the new 12-char code to add: ";
@@ -156,11 +166,13 @@ void add_key(map<int, list<string>>& table) {
     cin.ignore();
     cout << endl;
 
+    //if the code length is not the correct length, then return to the main function with this error message
     if (new_code.length() != 12) {
         cout << "Invalid code length. Must be 12 characters. Not added.\n";
         return;
     }
     
+    //compares the desired value to add to the current values already present within the hash table, in order to determine if this value can be added to the table
     int hash_i = gen_hash_index(new_code);
     auto it = table.find(hash_i);
     bool exists = false;
@@ -181,6 +193,7 @@ void add_key(map<int, list<string>>& table) {
     }
 }
 
+//void function that removes the desired value from the hash table if it exists
 void remove_key(map<int, list<string>>& table) {
     string target_code;
     cout << "Enter the 12-char code to remove: ";
@@ -192,6 +205,7 @@ void remove_key(map<int, list<string>>& table) {
     int hash_i = gen_hash_index(target_code);
     auto map_it = table.find(hash_i);
 
+    //this code block traverses the hash table and compares the values with our desired value, and if it is found within the hash table, removes it from the hash table
     if (map_it != table.end()) {
         auto& code_list = map_it->second;
         for (auto list_it = code_list.begin(); list_it != code_list.end(); ++list_it) {
@@ -210,6 +224,7 @@ void remove_key(map<int, list<string>>& table) {
     cout << "Code not found in the table. Nothing removed.\n";
 }
 
+//void function that modifies a designated value of the hash table
 void modify_key(map<int, list<string>>& table) {
     string old_code;
     string new_code;
@@ -222,6 +237,7 @@ void modify_key(map<int, list<string>>& table) {
     int hash_i_old = gen_hash_index(old_code);
     auto map_it = table.find(hash_i_old);
 
+    //code block that searches for the desired code, that was specified above, removes it from the hash table, and calls the add_key() function in order to "modify" the desired value
     if (map_it != table.end()) {
         auto& code_list = map_it->second;
         bool found = false;
