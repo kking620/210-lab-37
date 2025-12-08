@@ -71,9 +71,12 @@ int main() {
                     break;
                 case 6:
                     "Exiting program\n";
-                    return 0;
+                    break;
             }
         }
+
+        if (choice == 6)
+            break;
     }
 
     return 0;
@@ -171,6 +174,32 @@ void add_key(map<int, list<string>>& table) {
         table[hash_i].push_back(new_code);
         cout << "Successfully added code: " << new_code << " at index " << hash_i << ".\n";
     }
+}
+
+void remove_key(map<int, list<string>>& table) {
+    string target_code;
+    cout << "Enter the 12-char code to remove: ";
+    getline(cin, target_code);
+
+    int hash_i = gen_hash_index(target_code);
+    auto map_it = table.find(hash_i);
+
+    if (map_it != table.end()) {
+        auto& code_list = map_it->second;
+        for (auto list_it = code_list.begin(); list_it != code_list.end(); ++list_it) {
+            if (*list_it == target_code) {
+                code_list.erase(list_it);
+                cout << "Removed code: " << target_code << " from index " << hash_i << ".\n";
+                
+                if (code_list.empty()) {
+                    table.erase(map_it);
+                    cout << "Index " << hash_i << " is now empty and removed from the map.\n";
+                }
+                return;
+            }
+        }
+    }
+    cout << "Code not found in the table. Nothing removed.\n";
 }
 
 /* 
