@@ -44,7 +44,7 @@ int main() {
     //closes the data file
     fin.close();
 
-    int choice = 0;
+    int choice;
     while(true) {
         print_menu();
         cout << "Please enter your choice: ";
@@ -140,6 +140,36 @@ void search_for_key(const map<int, list<string>>& table) {
             }
         }
         cout << "The desired code was not found in the hash table\n";
+    }
+}
+
+void add_key(map<int, list<string>>& table) {
+    string new_code;
+    cout << "Enter the new 12-char code to add: ";
+    getline(cin, new_code);
+
+    if (new_code.length() != 12) {
+        cout << "Invalid code length. Must be 12 characters. Not added.\n";
+        return;
+    }
+    
+    int hash_i = gen_hash_index(new_code);
+    auto it = table.find(hash_i);
+    bool exists = false;
+    if (it != table.end()) {
+        for (const string& data_code : it->second) {
+            if (data_code == new_code) {
+                exists = true;
+                break;
+            }
+        }
+    }
+
+    if (exists) {
+        cout << "Error: This code already exists in the table.\n";
+    } else {
+        table[hash_i].push_back(new_code);
+        cout << "Successfully added code: " << new_code << " at index " << hash_i << ".\n";
     }
 }
 
